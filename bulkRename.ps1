@@ -1,9 +1,9 @@
 $workFolder = 'C:\Users\Serge\Documents\Killme\longnames'
 
-for ($i = 0; $i -lt 10; $i++) {
-    $fnm = Get-Random -Minimum 0x1000000000000 -Maximum 0xfffffffffffff
-    $xtn = Get-Random -Minimum 0x10 -Maximum 0xffffff
-    $tmpname = "{0:x}.{1:x}" -f $fnm, $xtn
+for ($i = 0; $i -lt 20; $i++) {
+    $fnm = "{0:x}" -f (Get-Random -Minimum 0x1000000000000 -Maximum 0xfffffffffffff)
+    $xtn = ("{0:x}" -f (Get-Random -Minimum 0x10 -Maximum 0xffffff)).SubString((Get-Random -Minimum 1 -Maximum 6))
+    $tmpname = "{0}.{1}" -f $fnm, $xtn
     New-Item -Path $workFolder -Name $tmpname
 }
 
