@@ -1,5 +1,6 @@
 $workFolder = 'C:\Users\Serge\Documents\Killme\longnames'
-$saltLen = 4
+$saltLen = 4 # длина случайной вставки в имя файла
+$tailLen = 4 # количество сохраняемых оригинальных символов в конце имени файла
 $mxLen = 58
 <#
 for ($i = 0; $i -lt 20; $i++) {
@@ -14,11 +15,14 @@ Get-ChildItem $workFolder -Recurse | Where-Object {
     if ((($tmpfn = $_).FullName).Length -gt $mxLen) {
         $salt =Get-Random -Minimum ((1 -shl ($saltLen - 1) * 4) + 1) -Maximum (1 -shl ($saltLen * 4) - 1)
         $extLen = $tmpfn.Extension.Length
-        $fnLen = $tmpfn.Name.Length
-        #$nuName = $tmpfn.Name.Substring(
+                $fnLen = $tmpfn.Name.Length
+        
+        $nuName = "{0}\" -f $tmpfn.Directory
+        $nuName +=  $tmpfn.Name.Substring(0, $fnLen - $saltLen-2 - $tailLen - $extLen)
+        $nuName += "={0:x}=" -f $salt
+        $nuName += $tmpfn.Name.Substring($fnLen - $tailLen - $extLen)
 
-        $nuName =  "{0}\{1}[{2:X}]{3}" -f $_.DirectoryName, ($_.Name).Substring(0, 7), $salt, ($_.Name).Substring($_.Name.Length-9, 9), $_.Extension 
-        Rename-Item $_.FullName -NewName $nuName -WhatIf
+        Rename-Item  $tmpfn.FullName -NewName $nuName #-WhatIf
     }
 }
 
