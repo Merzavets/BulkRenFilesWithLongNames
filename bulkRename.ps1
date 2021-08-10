@@ -3,8 +3,8 @@ $workFolder = 'C:\Users\Serge\Documents\Killme\longnames'
 for ($i = 0; $i -lt 10; $i++) {
     $fnm = Get-Random -Minimum 0x1000000000000 -Maximum 0xfffffffffffff
     $xtn = Get-Random -Minimum 0x10 -Maximum 0xffffff
-    $tmpname = ("{0:x}.{1:x}" -f $fnm, $xtn)
-    New-Item -Path $workFolder -Name ("{0:x}.{1:x}" -f $fnm, $xtn)
+    $tmpname = "{0:x}.{1:x}" -f $fnm, $xtn
+    New-Item -Path $workFolder -Name $tmpname
 }
 
 Get-ChildItem $workFolder -Recurse | Where-Object {
